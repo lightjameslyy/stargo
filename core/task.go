@@ -1,14 +1,17 @@
 package core
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+	"runtime"
+)
 
 type Task struct {
-	Name    string
-	Command func(...interface{})
+	Command func([]interface{})
 	Args    []interface{}
 }
 
 func (t *Task) Run() {
-	fmt.Println("Task Name: ", t.Name)
-	t.Command(t.Args...)
+	fmt.Println(runtime.FuncForPC(reflect.ValueOf(t.Command).Pointer()).Name())
+	t.Command(t.Args)
 }
