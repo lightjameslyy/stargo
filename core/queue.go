@@ -20,7 +20,7 @@ func (q *Queue) Push(v interface{}) {
 func (q *Queue) Pop() interface{} {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
-	if q.isEmpty() {
+	if q.Empty() {
 		return nil
 	}
 	head := q.items[0]
@@ -30,12 +30,12 @@ func (q *Queue) Pop() interface{} {
 
 // Returns if the queue is empty.
 // Not concurrently consistent.
-func (q *Queue) isEmpty() bool {
+func (q *Queue) Empty() bool {
 	return len(q.items) == 0
 }
 
 // Return queue size.
 // Not concurrently consistent.
-func (q *Queue) size() int {
+func (q *Queue) Size() int {
 	return len(q.items)
 }

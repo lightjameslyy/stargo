@@ -19,7 +19,7 @@ var queueTests = []struct {
 func TestQueue_isEmpty(t *testing.T) {
 	for _, tt := range queueTests {
 		fmt.Println(*tt.q)
-		res := tt.q.isEmpty()
+		res := tt.q.Empty()
 		if res != tt.res {
 			t.Errorf("queue: %v, expected %v, but got %v", *tt.q, tt.res, res)
 		}
@@ -49,7 +49,7 @@ func TestQueue_Push(t *testing.T) {
 
 	fmt.Println(*q)
 
-	curSize := q.size()
+	curSize := q.Size()
 	if curSize != 40 {
 		t.Errorf("q.size: expected %d, but got %d", 40, curSize)
 	}
@@ -83,7 +83,7 @@ func TestQueue_Pop(t *testing.T) {
 	}
 	wg.Wait()
 
-	if q.isEmpty() == false {
+	if q.Empty() == false {
 		t.Errorf("after pop, queue should be empty!")
 	}
 
