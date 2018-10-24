@@ -2,15 +2,13 @@ package core
 
 import "sync"
 
-// An FIFO queue.
+// A thread-safe FIFO queue.
 type Queue struct {
 	items []interface{}
-	mutex *sync.Mutex
+	mutex sync.Mutex
 }
 
 // Push an element into the queue.
-// e.g.:
-// 		q.push()
 func (q *Queue) Push(v interface{}) {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
@@ -18,10 +16,11 @@ func (q *Queue) Push(v interface{}) {
 }
 
 // Pop a element from head.
+// If the queue is empty, return nil.
 func (q *Queue) Pop() interface{} {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
-	if q.IsEmpty() {
+	if q.isEmpty() {
 		return nil
 	}
 	head := q.items[0]
@@ -29,7 +28,14 @@ func (q *Queue) Pop() interface{} {
 	return head
 }
 
-// Returns if the queue is empty or not.
-func (q *Queue) IsEmpty() bool {
+// Returns if the queue is empty.
+// Not concurrently consistent.
+func (q *Queue) isEmpty() bool {
 	return len(q.items) == 0
+}
+
+// Return queue size.
+// Not concurrently consistent.
+func (q *Queue) size() int {
+	return len(q.items)
 }

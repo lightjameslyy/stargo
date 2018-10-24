@@ -26,7 +26,7 @@ func addToIntPtr(args []interface{}) interface{} {
 }
 
 // 表格驱动测试
-var tests = []struct {
+var taskTests = []struct {
 	task Task
 }{
 	// 匿名函数，参数为空
@@ -47,7 +47,7 @@ var tests = []struct {
 }
 
 func TestTask_Run(t *testing.T) {
-	for _, tt := range tests {
+	for _, tt := range taskTests {
 		fmt.Println(tt.task.Run())
 		fmt.Println(tt.task.TaskInfo())
 	}
