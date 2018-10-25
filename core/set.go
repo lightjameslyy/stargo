@@ -16,21 +16,28 @@ type Set struct {
 }
 
 func (s *Set) Insert(v T) {
-
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+	s.mp[v] = true
 }
 
 func (s *Set) Remove(v T) {
-
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+	delete(s.mp, v)
 }
 
 func (s *Set) Has(v T) bool {
-	return false
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+	_, ok := s.mp[v]
+	return ok
 }
 
 func (s *Set) Empty() bool {
-	return false
+	return len(s.mp) == 0
 }
 
 func (s *Set) Size() int {
-	return 0
+	return len(s.mp)
 }
