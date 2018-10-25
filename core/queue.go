@@ -2,14 +2,21 @@ package core
 
 import "sync"
 
+type IQueue interface {
+	Push(T)
+	Pop() T
+	Empty() bool
+	Size() int
+}
+
 // A thread-safe FIFO queue.
 type Queue struct {
-	items []interface{}
+	items []T
 	mutex sync.Mutex
 }
 
 // Push an element into the queue.
-func (q *Queue) Push(v interface{}) {
+func (q *Queue) Push(v T) {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
 	q.items = append(q.items, v)
@@ -17,7 +24,7 @@ func (q *Queue) Push(v interface{}) {
 
 // Pop a element from head.
 // If the queue is empty, return nil.
-func (q *Queue) Pop() interface{} {
+func (q *Queue) Pop() T {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
 	if q.Empty() {

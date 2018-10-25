@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func sum(args []interface{}) interface{} {
+func sum(args []T) T {
 	res := 0
 	for _, n := range args {
 		res += n.(int)
@@ -15,7 +15,7 @@ func sum(args []interface{}) interface{} {
 
 var testIntPtr = new(int)
 
-func addToIntPtr(args []interface{}) interface{} {
+func addToIntPtr(args []T) T {
 	intPtr := args[0].(*int)
 	*intPtr = 0
 	nums := args[1].([]int)
@@ -31,7 +31,7 @@ var taskTests = []struct {
 }{
 	// 匿名函数，参数为空
 	{Task{
-		func(i []interface{}) interface{} {
+		func(i []T) T {
 			fmt.Println("anonymous function")
 			return nil
 		},
@@ -39,11 +39,11 @@ var taskTests = []struct {
 	// 同类参数
 	{Task{
 		sum,
-		[]interface{}{1, 2, 3, 4, 5}}},
+		[]T{1, 2, 3, 4, 5}}},
 	// 不同类参数
 	{Task{
 		addToIntPtr,
-		[]interface{}{testIntPtr, []int{1, 2, 3, 4, 5}}}},
+		[]T{testIntPtr, []int{1, 2, 3, 4, 5}}}},
 }
 
 func TestTask_Run(t *testing.T) {
@@ -51,4 +51,18 @@ func TestTask_Run(t *testing.T) {
 		fmt.Println(tt.task.Run())
 		fmt.Println(tt.task.TaskInfo())
 	}
+}
+
+func TestSTask_State(t *testing.T) {
+	var state State
+	fmt.Println(state)
+}
+
+func TestSTask_Process(t *testing.T) {
+	task := STask{Func: func(t T) T {
+		fmt.Println(t)
+		panic("fake panic")
+	}, Args: 1, state: NOTDONE}
+	res, err := task.Process()
+	fmt.Println(res, err)
 }
