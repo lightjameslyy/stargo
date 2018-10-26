@@ -6,8 +6,11 @@ import (
 )
 
 func TestTask_State(t *testing.T) {
-	var state TaskState
-	fmt.Println(state)
+	task := TaskFactory{}.Create()
+	state := task.State()
+	if state != TASK_NOTDONE {
+		t.Errorf("task state expected %v, but got %v", TASK_NOTDONE, state)
+	}
 }
 
 func TestTask_Process(t *testing.T) {
