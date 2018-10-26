@@ -2,7 +2,7 @@ package core
 
 import "sync"
 
-// A thread-safe FIFO queue.
+// A thread-safe FIFO queue implements IQueue
 type Queue struct {
 	items []T
 	mutex sync.Mutex

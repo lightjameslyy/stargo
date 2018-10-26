@@ -17,7 +17,8 @@ const (
 type DagState int
 
 const (
-	DAG_CREATING DagState = iota
+	DAG_INIT DagState = iota
 	DAG_UPDATING
+	DAG_NOTDONE
 	DAG_DONE
 )
