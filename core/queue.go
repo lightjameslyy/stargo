@@ -2,13 +2,6 @@ package core
 
 import "sync"
 
-type IQueue interface {
-	Push(T)
-	Pop() T
-	Empty() bool
-	Size() int
-}
-
 // A thread-safe FIFO queue.
 type Queue struct {
 	items []T

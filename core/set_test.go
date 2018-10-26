@@ -1,13 +1,12 @@
 package core
 
 import (
-	"fmt"
 	"sync"
 	"testing"
 )
 
 func TestSet_Insert(t *testing.T) {
-	s := Set{mp: map[T]bool{}}
+	s := SetFactory{}.Create()
 
 	var wg sync.WaitGroup
 	wg.Add(4)
@@ -23,7 +22,6 @@ func TestSet_Insert(t *testing.T) {
 
 	wg.Wait()
 
-	fmt.Println(s.mp)
 	size := s.Size()
 	if size != 40 {
 		t.Errorf("expected size: %d, but got %d", 40, size)
@@ -32,7 +30,7 @@ func TestSet_Insert(t *testing.T) {
 }
 
 func TestSet_Remove(t *testing.T) {
-	s := Set{mp: map[T]bool{}}
+	s := SetFactory{}.Create()
 
 	for i := 0; i < 10; i++ {
 		s.Insert(i)
@@ -48,7 +46,6 @@ func TestSet_Remove(t *testing.T) {
 	}
 
 	wg.Wait()
-	fmt.Println(s.mp)
 
 	if s.Size() != 0 {
 		t.Errorf("set should be empty!")
@@ -56,7 +53,7 @@ func TestSet_Remove(t *testing.T) {
 }
 
 func TestSet_Has(t *testing.T) {
-	s := Set{mp: map[T]bool{}}
+	s := SetFactory{}.Create()
 
 	s.Insert(2)
 	s.Insert(3)
@@ -72,7 +69,7 @@ func TestSet_Has(t *testing.T) {
 }
 
 func TestSet_Empty(t *testing.T) {
-	s := Set{mp: map[T]bool{}}
+	s := SetFactory{}.Create()
 
 	if s.Empty() != true {
 		t.Errorf("set should be empty!")
@@ -80,7 +77,7 @@ func TestSet_Empty(t *testing.T) {
 }
 
 func TestSet_Size(t *testing.T) {
-	s := Set{mp: map[T]bool{}}
+	s := SetFactory{}.Create()
 
 	size := s.Size()
 	if size != 0 {
@@ -105,8 +102,6 @@ func TestSet_Size(t *testing.T) {
 		}(rank)
 	}
 	wg.Wait()
-
-	fmt.Println(s.mp)
 
 	size = s.Size()
 	if size != 10 {

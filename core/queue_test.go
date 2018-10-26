@@ -9,19 +9,18 @@ import (
 
 // 表格驱动测试
 var queueTests = []struct {
-	q   *Queue
+	q   IQueue
 	res bool
 }{
-	{new(Queue), true},
+	{QueueFactory{}.Create(), true},
 	{&Queue{items: []interface{}{1, 2, 3}}, false},
 }
 
 func TestQueue_isEmpty(t *testing.T) {
 	for _, tt := range queueTests {
-		fmt.Println(*tt.q)
 		res := tt.q.Empty()
 		if res != tt.res {
-			t.Errorf("queue: %v, expected %v, but got %v", *tt.q, tt.res, res)
+			t.Errorf("queue empty? expected %v, but got %v", tt.res, res)
 		}
 	}
 }
@@ -31,7 +30,7 @@ func TestQueue_Push(t *testing.T) {
 
 	wg.Add(4)
 
-	q := new(Queue)
+	q := QueueFactory{}.Create()
 
 	ranks := []int{0, 1, 2, 3}
 
@@ -47,8 +46,6 @@ func TestQueue_Push(t *testing.T) {
 	}
 	wg.Wait()
 
-	fmt.Println(*q)
-
 	curSize := q.Size()
 	if curSize != 40 {
 		t.Errorf("q.size: expected %d, but got %d", 40, curSize)
@@ -60,17 +57,13 @@ func TestQueue_Pop(t *testing.T) {
 
 	wg.Add(4)
 
-	q := new(Queue)
+	q := QueueFactory{}.Create()
 
 	for i := 0; i < 40; i++ {
 		q.Push(i)
 	}
 
-	fmt.Println("before pop:", q.items)
-
-	ranks := []int{0, 1, 2, 3}
-
-	for rank := range ranks {
+	for rank := range []int{0, 1, 2, 3} {
 		go func(rank int) {
 			defer wg.Done()
 			var nums []int

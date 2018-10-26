@@ -2,14 +2,7 @@ package core
 
 import "sync"
 
-type ISet interface {
-	Insert(T)
-	Remove(T)
-	Has(T) bool
-	Empty() bool
-	Size() int
-}
-
+// Set implements ISet
 type Set struct {
 	mp    map[T]bool
 	mutex sync.Mutex
