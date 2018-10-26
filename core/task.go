@@ -4,36 +4,9 @@ import (
 	"fmt"
 	"reflect"
 	"runtime"
-	"strings"
 )
 
 type T = interface{}
-
-type Func = func([]T) T
-
-type ITask interface {
-	Process() (T, error)
-	State() T
-}
-
-type Task struct {
-	Command Func
-	Args    []T
-}
-
-func (t *Task) Run() T {
-	return t.Command(t.Args)
-}
-
-func (t *Task) TaskInfo() string {
-	var res strings.Builder
-	res.WriteString(runtime.FuncForPC(reflect.ValueOf(t.Command).Pointer()).Name() + "( ")
-	for _, arg := range t.Args {
-		res.WriteString(fmt.Sprintf("%T: %v, ", arg, arg))
-	}
-	res.WriteString(")\n")
-	return res.String()
-}
 
 type F = func(T) T
 
@@ -45,14 +18,19 @@ const (
 	WRONG
 )
 
-type STask struct {
+type ITask interface {
+	Process() (T, error)
+	State() T
+}
+
+type Task struct {
 	Func    F
 	Args    T
 	Parents ISet
 	state   State
 }
 
-func (t *STask) Process() (res T, err error) {
+func (t *Task) Process() (res T, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			t.state = WRONG
@@ -65,6 +43,6 @@ func (t *STask) Process() (res T, err error) {
 	return res, nil
 }
 
-func (t *STask) State() T {
+func (t *Task) State() T {
 	return t.state
 }
