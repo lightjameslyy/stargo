@@ -31,7 +31,9 @@ func (d *Dag) State() T {
 }
 
 func (d *Dag) lock() {
-
+	d.stateMutex.Lock()
+	defer d.stateMutex.Unlock()
+	d.state = DAG_NOTDONE
 }
 
 func (d *Dag) update() {
