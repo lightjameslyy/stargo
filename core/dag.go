@@ -1,6 +1,8 @@
 package core
 
-import "sync"
+import (
+	"sync"
+)
 
 // Dag implements IDag
 type Dag struct {
@@ -9,15 +11,29 @@ type Dag struct {
 	state             DagState
 	stateMutex        sync.Mutex
 	nAll              int
-	nDone             int
+	nSent             int
+	locked            bool
+	lockedMutex       sync.Mutex
 }
 
-func (d *Dag) AddTask(task ITask) {
+func (d *Dag) AddTask(task ITask) (err error) {
+	d.lockedMutex.Lock()
+	defer d.lockedMutex.Unlock()
+	if d.locked == true {
+		return ErrDagLocked
+	}
 	d.notReadyTaskQueue.Push(task)
+	return nil
 }
 
-func (d *Dag) AddEdge(from ITask, to ITask) {
+func (d *Dag) AddEdge(from ITask, to ITask) (err error) {
+	d.lockedMutex.Lock()
+	defer d.lockedMutex.Unlock()
+	if d.locked == true {
+		return ErrDagLocked
+	}
 	to.AddParent(from)
+	return nil
 }
 
 func (d *Dag) GetReadyTask() ITask {
@@ -30,12 +46,29 @@ func (d *Dag) State() T {
 	return d.state
 }
 
-func (d *Dag) lock() {
-	d.stateMutex.Lock()
-	defer d.stateMutex.Unlock()
-	d.state = DAG_NOTDONE
+func (d *Dag) Lock() (err error) {
+	d.lockedMutex.Lock()
+	defer d.lockedMutex.Unlock()
+	d.locked = true
+	d.nAll = d.notReadyTaskQueue.Size()
+	d.nSent = 0
+	return nil
 }
 
-func (d *Dag) update() {
-
+func (d *Dag) Update(taskChan chan ITask) {
+	// update in a goroutine
+	go func() {
+		for d.State() != DAG_DONE {
+			if d.readyTaskQueue.Empty() == false {
+				taskChan <- d.readyTaskQueue.Pop().(ITask)
+				d.nSent++
+				if d.nSent == d.nAll {
+					d.state = DAG_DONE
+				}
+			} else {
+				for d.readyTaskQueue.Empty() {
+				}
+			}
+		}
+	}()
 }
