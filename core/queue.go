@@ -9,6 +9,7 @@ type Queue struct {
 }
 
 // Push an element into the queue.
+// Here we assuming there is no limit on the queue's capacity.
 func (q *Queue) Push(v T) {
 	q.mutex.Lock()
 	defer q.mutex.Unlock()
@@ -29,13 +30,13 @@ func (q *Queue) Pop() T {
 }
 
 // Returns if the queue is empty.
-// Not concurrently consistent.
+// NOT thread safe.
 func (q *Queue) Empty() bool {
 	return len(q.items) == 0
 }
 
 // Return queue size.
-// Not concurrently consistent.
+// NOT thread safe.
 func (q *Queue) Size() int {
 	return len(q.items)
 }

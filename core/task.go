@@ -14,14 +14,17 @@ type Task struct {
 	state   TaskState
 }
 
+// Set function.
 func (t *Task) SetFunc(f F) {
 	t.Func = f
 }
 
+// Set arguments.
 func (t *Task) SetArgs(args T) {
 	t.Args = args
 }
 
+// Run the task.
 func (t *Task) Process() (res T, err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -36,14 +39,17 @@ func (t *Task) Process() (res T, err error) {
 	return res, nil
 }
 
+// Get state. Check if it's type is TaskState.
 func (t *Task) State() T {
 	return t.state
 }
 
+// Add a parent task.
 func (t *Task) AddParent(p ITask) {
 	t.Parents.Insert(p)
 }
 
+// Get number of parents.
 func (t *Task) ParentsSize() int {
 	return t.Parents.Size()
 }

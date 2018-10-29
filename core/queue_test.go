@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// 表格驱动测试
+// tables driven testing
 var queueTests = []struct {
 	q   IQueue
 	res bool
