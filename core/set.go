@@ -43,6 +43,8 @@ func (s *Set) Size() int {
 
 // Return slice of all elements in the set.
 func (s *Set) All() []T {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
 	res := []T{}
 	for k := range s.mp {
 		res = append(res, k)
