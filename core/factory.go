@@ -14,7 +14,7 @@ type TaskFactory struct{}
 
 func (TaskFactory) Create() ITask {
 	return &Task{
-		Parents: SetFactory{}.Create(),
+		parents: SetFactory{}.Create(),
 		state:   TASK_NOTDONE,
 	}
 }
@@ -52,8 +52,8 @@ type DagFactory struct{}
 
 func (DagFactory) Create() IDag {
 	return &Dag{
-		notReadyTaskQueue: QueueFactory{}.Create(),
-		readyTaskQueue:    QueueFactory{}.Create(),
-		state:             DAG_INIT,
+		readyTaskQueue:  QueueFactory{}.Create(),
+		notReadyTaskSet: SetFactory{}.Create(),
+		state:           DAG_INIT,
 	}
 }
