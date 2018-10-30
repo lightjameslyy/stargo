@@ -13,6 +13,8 @@ type ITask interface {
 	AddParent(ITask)
 	// Return number of parents.
 	ParentsSize() int
+	// Check if ready.
+	IsReady() bool
 	// Run the function with supplied arguments.
 	Process() (T, error)
 }

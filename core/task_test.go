@@ -29,6 +29,7 @@ func TestTask_AddParent(t *testing.T) {
 		return nil
 	})
 	task.SetArgs(1)
+
 	parent := TaskFactory{}.Create()
 	parent.SetFunc(func(t T) T {
 		fmt.Println("parent:", t)
@@ -45,4 +46,27 @@ func TestTask_AddParent(t *testing.T) {
 	if size != 1 {
 		t.Errorf("task.Parents.Size expected %d, but got %d", 1, size)
 	}
+}
+
+func TestTask_IsReady(t *testing.T) {
+	var tasks [2]ITask
+	for i := 0; i < 2; i++ {
+		tasks[i] = TaskFactory{}.Create()
+	}
+
+	if !tasks[0].IsReady() {
+		t.Errorf("task 0 should be ready!")
+	}
+
+	tasks[1].AddParent(tasks[0])
+	if tasks[1].IsReady() {
+		t.Errorf("task 1 should't be ready!")
+	}
+
+	res, err := tasks[0].Process()
+	fmt.Println(res, err)
+	if !tasks[1].IsReady() {
+		t.Errorf("task 1 should be ready!")
+	}
+
 }
