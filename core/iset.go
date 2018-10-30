@@ -12,4 +12,6 @@ type ISet interface {
 	Empty() bool
 	// Return how many elements contained in the set.
 	Size() int
+	// Return slice of all elements in the set.
+	All() []T
 }

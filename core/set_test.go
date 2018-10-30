@@ -1,6 +1,7 @@
 package core
 
 import (
+	"fmt"
 	"sync"
 	"testing"
 )
@@ -108,4 +109,22 @@ func TestSet_Size(t *testing.T) {
 		t.Errorf("expected size: %d, but got %d", 10, size)
 	}
 
+}
+
+func TestSet_All(t *testing.T) {
+	s := SetFactory{}.Create()
+
+	for i := 0; i < 10; i++ {
+		s.Insert(i)
+	}
+
+	items := s.All()
+
+	if len(items) != 10 {
+		t.Errorf("expected number of items: %d, but got %d", 10, len(items))
+	}
+
+	for i, val := range items {
+		fmt.Println(i, val)
+	}
 }

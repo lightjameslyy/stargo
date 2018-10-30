@@ -40,3 +40,12 @@ func (s *Set) Empty() bool {
 func (s *Set) Size() int {
 	return len(s.mp)
 }
+
+// Return slice of all elements in the set.
+func (s *Set) All() []T {
+	res := []T{}
+	for k := range s.mp {
+		res = append(res, k)
+	}
+	return res
+}
