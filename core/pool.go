@@ -1,50 +1,90 @@
 package core
 
-import "log"
+import (
+	"fmt"
+	"log"
+	"sync"
+)
 
 // Pool implements IPool
 type Pool struct {
-	dag      IDag
-	doneChan chan bool
 	workers  int
 	taskChan chan ITask
 }
 
 func (p *Pool) Init(workers int) {
-	p.doneChan = make(chan bool, workers)
+	p.workers = workers
 	p.taskChan = make(chan ITask, workers)
 }
 
-func (p *Pool) Bind(dag IDag) {
+func (p *Pool) Process(dag IDag) {
 	dag.Lock()
-	p.dag = dag
-}
+	dag.Update(p.taskChan)
 
-func (p *Pool) Process() {
-	p.dag.Update(p.taskChan)
+	var wg sync.WaitGroup
+	/*
+	wg.Add(p.workers)
 
 	for i := 0; i < p.workers; i++ {
-		createWorker(p.taskChan, p.doneChan)
+		createWorker(p.taskChan, wg)
 	}
+	*/
+	wg.Add(dag.Size())
 
-	for i := 0; i < p.workers; i++ {
+	for i := 0; i < dag.Size(); i++ {
 		select {
-		// 先不管是否正常退出
-		case <-p.doneChan:
+		case task := <-p.taskChan:
+			go func() {
+				_, err := task.Process()
+				wg.Done()
+				if err != nil {
+					log.Println(err)
+				}
+			}()
 		}
 	}
+
+	wg.Wait()
 }
 
-func createWorker(taskChan chan ITask, doneChan chan<- bool) {
+func worker(task ITask, wg sync.WaitGroup) {
 	go func() {
+		_, err := task.Process()
+		wg.Done()
+		if err != nil {
+			log.Println(err)
+		}
+	}()
+}
+
+func createWorker(taskChan chan ITask, wg sync.WaitGroup) {
+	go func() {
+		/*
 		select {
-		case task:= <- taskChan:
+		case task, ok := <-taskChan:
+			if !ok {
+				fmt.Println("closed")
+				break
+			}
 			_, err := task.Process()
 			if err != nil {
 				log.Println(err)
 				break
 			}
 		}
-		doneChan <- true
+		*/
+		for {
+			task, open := <-taskChan
+			if !open {
+				break
+			}
+			_, err := task.Process()
+			wg.Done()
+			if err != nil {
+				log.Println(err)
+				break
+			}
+		}
+		fmt.Println("worker done")
 	}()
 }

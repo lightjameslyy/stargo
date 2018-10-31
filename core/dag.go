@@ -88,5 +88,13 @@ func (d *Dag) Update(taskChan chan ITask) {
 				}
 			}
 		}
+		close(taskChan)
 	}()
+}
+
+func (d *Dag) Size() int {
+	if d.locked {
+		return d.nAll
+	}
+	return d.notReadyTaskSet.Size()
 }

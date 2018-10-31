@@ -8,4 +8,5 @@ type IDag interface {
 	Lock() error
 	Update(chan ITask)
 	State() T
+	Size() int
 }

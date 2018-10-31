@@ -57,3 +57,16 @@ func (DagFactory) Create() IDag {
 		state:           DAG_INIT,
 	}
 }
+
+// factory for pool
+type IPoolFactory interface {
+	Create() IPool
+}
+
+type PoolFactory struct{}
+
+func (PoolFactory) Create() IPool {
+	return &Pool{
+		workers: 0,
+	}
+}
