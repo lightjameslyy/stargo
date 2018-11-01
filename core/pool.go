@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"log"
 	"sync"
 )
@@ -26,13 +25,14 @@ func (p *Pool) Process(dag IDag) {
 	wg.Add(p.workers)
 
 	for i := 0; i < p.workers; i++ {
-		createWorker(p.taskChan, &wg)
+		rank := i
+		createWorker(rank, p.taskChan, &wg)
 	}
 
 	wg.Wait()
 }
 
-func createWorker(taskChan chan ITask, wg *sync.WaitGroup) {
+func createWorker(rank int, taskChan chan ITask, wg *sync.WaitGroup) {
 	go func() {
 		for {
 			task, ok := <-taskChan
@@ -46,6 +46,6 @@ func createWorker(taskChan chan ITask, wg *sync.WaitGroup) {
 			}
 		}
 		wg.Done()
-		fmt.Println("worker done")
+		log.Printf("POOL: worker %d done", rank)
 	}()
 }

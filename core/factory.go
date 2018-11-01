@@ -55,6 +55,9 @@ func (DagFactory) Create() IDag {
 		readyTaskQueue:  QueueFactory{}.Create(),
 		notReadyTaskSet: SetFactory{}.Create(),
 		state:           DAG_INIT,
+		nAll:            0,
+		nSent:           0,
+		locked:          false,
 	}
 }
 
