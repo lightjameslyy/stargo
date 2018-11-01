@@ -1,6 +1,7 @@
 package core
 
 import (
+	"log"
 	"sync"
 )
 
@@ -89,6 +90,7 @@ func (d *Dag) Update(taskChan chan ITask) {
 			}
 		}
 		close(taskChan)
+		log.Println("DAG: All tasks are sent.")
 	}()
 }
 
