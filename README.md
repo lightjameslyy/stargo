@@ -18,30 +18,27 @@ star是一个基于DAG调度的并行优化引擎，目前有共享内存（star
 
 对任务的封装。
 
-#### Topology
+#### Dag
 
-tasks构成的DAG。
+tasks构成的Dag。
 
-#### Scheduler
+#### Pool
 
-调度器。
-
-#### Worker
-
-一个goroutine。
-
-
-## 安装教程
-
-1. xxxx
-2. xxxx
-3. xxxx
+Goroutine池，处理Dag。
 
 ## 使用说明
 
-1. xxxx
-2. xxxx
-3. xxxx
+### example
+
+#### demo_01
+
+demo_01是一个简单的stargo示例程序，Dag图如下图所示：
+
+![demo_01_dag](example/demo_01/demo_01.png)
+
+运行结果：
+
+![demo_01_gif](example/demo_01/demo_01.gif)
 
 ## 参与贡献
 
