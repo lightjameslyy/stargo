@@ -90,7 +90,7 @@ func (d *Dag) Update(taskChan chan ITask) {
 			}
 		}
 		close(taskChan)
-		log.Println("DAG: All tasks are sent.")
+		log.Println("INFO: from DAG: All tasks are sent.")
 	}()
 }
 

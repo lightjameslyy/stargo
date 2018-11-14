@@ -46,6 +46,6 @@ func createWorker(rank int, taskChan chan ITask, wg *sync.WaitGroup) {
 			}
 		}
 		wg.Done()
-		log.Printf("POOL: worker %d done", rank)
+		log.Printf("INFO: from POOL: worker[%d] done", rank)
 	}()
 }
