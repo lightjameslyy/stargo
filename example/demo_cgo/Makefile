@@ -1,6 +1,6 @@
 .PHONY: clean
 
-TARGET=demo_cpp
+TARGET=demo_cgo
 
 $(TARGET): libfoo.a
 	go build .
