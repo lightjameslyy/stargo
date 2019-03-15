@@ -1,53 +1,38 @@
 # stargo
 
-## 项目介绍
+## Introduction
 
-STAR(Simultaneous Task Autotuning Runtime) implemented with Golang
+stargo: STAR(Scheduling Tasks Asynchronously Runtime) implemented with Golang.
 
-## 软件架构
+STAR is a parallel optimization engine based on DAG scheduling. 
 
-star是一个基于DAG调度的并行优化引擎，目前有共享内存（star\_tp）和分布式内存（star-d、star-thrift）的实现。
+Golang is natrually designed for parallel and distributed programming. So, we implemented STAR using Golang.
 
-现有版本的稳定性不确定，共享内存版本和分布式内存版本的接口不一致，而且有一些BUG。
+## Components
 
-由于Golang对并行编程和异步通信的天然支持，我决定采用Golang实现star的共享内存版本和分布式内存版本，为用户提供统一的接口。
+### Task
 
-### stargo modules
+task wrapper.
 
-#### Task
+### Dag
 
-对任务的封装。
+DAG composed of tasks.
 
-#### Dag
+### Pool
 
-tasks构成的Dag。
+pool of goroutines.
 
-#### Pool
-
-Goroutine池，处理Dag。
-
-## 使用说明
+## Usage
 
 ### example
 
 #### demo_01
 
-demo_01是一个简单的stargo示例程序，Dag图如下图所示：
+demo_01 is a simple example, whose dag is as follows:
 
 ![demo_01_dag](example/demo_01/demo_01.png)
 
-运行结果：
+execution and result:
 
 ![demo_01_gif](example/demo_01/demo_01.gif)
 
-## 参与贡献
-
-1. Fork 本项目
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
-
-
-## 特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
