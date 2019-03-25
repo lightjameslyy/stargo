@@ -2,7 +2,7 @@
 
 ## Introduction
 
-stargo: STAR(Scheduling Tasks Asynchronously Runtime) implemented with Golang.
+stargo: STAR(Scheduling Tasks Asynchronously at Runtime) implemented with Golang.
 
 STAR is a parallel optimization engine based on DAG scheduling. 
 
